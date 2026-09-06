@@ -1,1 +1,35 @@
 .DS_Store
+
+# --- Observatory data and pipeline output ----------------------------------
+# A night straight from the acquisition software is a few hundred MB of FITS,
+# and reducing it produces more again. Both are reproducible on the
+# participant's own machine, so neither belongs in the repository. The `raw/`
+# directory is kept (empty) so there is somewhere obvious to put a night.
+**/raw/*
+!**/raw/.gitkeep
+**/work/
+*.fits
+*.fit
+*.fts
+*.fz
+*.fits.gz
+
+# --- Python / Jupyter ------------------------------------------------------
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# --- LaTeX build products --------------------------------------------------
+# The PDFs are committed; everything pdflatex writes on the way is not.
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
