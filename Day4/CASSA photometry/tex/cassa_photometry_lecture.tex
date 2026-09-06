@@ -185,6 +185,7 @@ cassa-diagnose   work/phase2 --raw raw/    # Phase 4: diagnostics
 
 cassa-run -i raw/ -o work/                 # Phases 1->2->3 chained
 cassa-verify work/phase3                   # independent sanity check
+cassa-doctor                               # is this machine ready? (run it first)
 \end{lstlisting}
   \vspace{0.3em}
   \footnotesize Each phase is one sub-package writing to its own directory
@@ -233,14 +234,16 @@ cassa-verify work/phase3                   # independent sanity check
 \begin{frame}{The DQ bitmask: one integer, many reasons}
   \centering
   \begin{tikzpicture}[node distance=2mm]
-    \foreach \bit/\nm/\x in {8/NO\_DATA/0, 4/COSMIC\_RAY/2.6, 2/BAD\_PIXEL/5.2, 1/SATURATED/7.8} {
-      \node[dat, minimum width=2.3cm, minimum height=0.75cm, anchor=west] at (\x,0)
+    \foreach \bit/\nm/\x in {16/REJECTED/0, 8/NO\_DATA/2.25, 4/COSMIC\_RAY/4.5,
+                             2/BAD\_PIXEL/6.75, 1/SATURATED/9.0} {
+      \node[dat, minimum width=2.0cm, minimum height=0.75cm, anchor=west] at (\x,0)
         (n\bit) {\texttt{\bit} \;\; \tiny\texttt{\nm}};
     }
-    \node[why, below=1mm of n8, text width=2.3cm]  {NaN / outside warp footprint};
-    \node[why, below=1mm of n4, text width=2.3cm]  {LA\,Cosmic hit};
-    \node[why, below=1mm of n2, text width=2.3cm]  {hot / dead / unstable};
-    \node[why, below=1mm of n1, text width=2.3cm]  {$\ge$ saturation ADU};
+    \node[why, below=1mm of n16, text width=2.1cm] {frames clipped here (stacks only)};
+    \node[why, below=1mm of n8, text width=2.1cm]  {NaN / outside warp footprint};
+    \node[why, below=1mm of n4, text width=2.1cm]  {LA\,Cosmic hit};
+    \node[why, below=1mm of n2, text width=2.1cm]  {hot / dead / unstable};
+    \node[why, below=1mm of n1, text width=2.1cm]  {$\ge$ saturation ADU};
   \end{tikzpicture}
 
   \vspace{1.0em}
@@ -300,38 +303,48 @@ cassa-verify work/phase3                   # independent sanity check
   \centering
   \vspace{-0.3em}
   \begin{tikzpicture}[
-      pstep/.style={op, text width=1.75cm, minimum height=0.72cm},
-      ann/.style={why, text width=2.15cm, anchor=north}]
+      pstep/.style={op, text width=1.5cm, minimum height=0.72cm},
+      ann/.style={why, text width=1.95cm, anchor=north}]
     % --- row 1 (y = 0), annotations hang beneath each box
-    \node[dat, text width=1.5cm, minimum height=0.72cm] (in) at (0,0) {raw\\ \tiny ADU};
-    \node[pstep] (s1) at (2.6,0) {seed ERR};
-    \node[pstep] (s2) at (5.2,0) {overscan};
-    \node[pstep] (s3) at (7.8,0) {$-$ bias};
-    \node[pstep] (s4) at (10.4,0) {$-$ dark};
-    \foreach \a/\b in {in/s1, s1/s2, s2/s3, s3/s4} \draw[arr] (\a) -- (\b);
+    \node[dat, text width=1.4cm, minimum height=0.72cm] (in) at (0,0) {raw\\ \tiny ADU};
+    \node[pstep] (s0) at (2.15,0) {linearise};
+    \node[pstep] (s1) at (4.3,0) {seed ERR};
+    \node[pstep] (s2) at (6.45,0) {overscan};
+    \node[pstep] (s3) at (8.6,0) {$-$ bias};
+    \node[pstep] (s4) at (10.75,0) {$-$ dark};
+    \foreach \a/\b in {in/s0, s0/s1, s1/s2, s2/s3, s3/s4} \draw[arr] (\a) -- (\b);
 
-    \node[ann] at (2.6,-0.46) {$\sigma=\sqrt{gI+\mathrm{RN}^2}/g$ \\ \emph{start the budget}};
-    \node[ann] at (5.2,-0.46) {row-wise median \\ \emph{kills banding}};
-    \node[ann] at (7.8,-0.46) {quadrature add \\ \emph{drop the pedestal}};
-    \node[ann] at (10.4,-0.46) {rescale by the $t$ ratio \\ \emph{drop thermal signal}};
+    \node[ann] at (2.15,-0.46) {profile's own curve \\ \emph{identity if none}};
+    \node[ann] at (4.3,-0.46) {$\sqrt{g(I{-}B)+\mathrm{RN}^2}\,/\,g$ \\ \emph{the pedestal is not signal}};
+    \node[ann] at (6.45,-0.46) {row-wise median \\ \emph{kills banding}};
+    \node[ann] at (8.6,-0.46) {quadrature add \\ \emph{drop the pedestal}};
+    \node[ann] at (10.75,-0.46) {rescale by the $t$ ratio \\ \emph{drop thermal signal}};
 
     % --- row 2 (y = -2.7), reached through a clear lane at y = -1.5
     \node[pstep] (s5) at (0,-2.7) {$\div$ flat};
-    \node[pstep] (s6) at (2.6,-2.7) {reject CRs};
-    \node[pstep] (s7) at (5.2,-2.7) {$\times$ gain};
-    \node[pstep] (s8) at (7.8,-2.7) {build DQ};
-    \node[prod, text width=1.75cm, minimum height=0.72cm] (out) at (10.4,-2.7) {SCI/ERR/DQ\\ \tiny e$^-$};
-    \foreach \a/\b in {s5/s6, s6/s7, s7/s8, s8/out} \draw[arr] (\a) -- (\b);
+    \node[pstep] (s6) at (2.15,-2.7) {reject CRs};
+    \node[pstep] (s7) at (4.3,-2.7) {sanity-check};
+    \node[pstep] (s8) at (6.45,-2.7) {$\times$ gain};
+    \node[pstep] (s9) at (8.6,-2.7) {build DQ};
+    \node[prod, text width=1.6cm, minimum height=0.72cm] (out) at (10.75,-2.7) {SCI/ERR/DQ\\ \tiny e$^-$};
+    \foreach \a/\b in {s5/s6, s6/s7, s7/s8, s8/s9, s9/out} \draw[arr] (\a) -- (\b);
     \draw[arr] (s4.east) -- ++(0.45,0) -- ++(0,-1.5) -| (s5.north);
 
     \node[ann] at (0,-3.16)    {relative errors add \\ \emph{flatten the optics}};
-    \node[ann] at (2.6,-3.16)  {Laplacian, \texttt{inmask}=BPM \\ \emph{sharp $\neq$ star}};
-    \node[ann] at (5.2,-3.16)  {scales SCI \emph{and} ERR \\ \emph{ADU $\rightarrow$ physical}};
-    \node[ann] at (7.8,-3.16)  {OR the masks \\ \emph{label, never delete}};
+    \node[ann] at (2.15,-3.16) {Laplacian, \texttt{inmask}=BPM \\ \emph{sharp $\neq$ star}};
+    \node[ann] at (4.3,-3.16)  {mask $>1\%$ of the frame? \\ \emph{veto it whole}};
+    \node[ann] at (6.45,-3.16) {scales SCI \emph{and} ERR \\ \emph{ADU $\rightarrow$ physical}};
+    \node[ann] at (8.6,-3.16)  {OR the masks \\ \emph{label, never delete}};
   \end{tikzpicture}
 
   \vspace{0.4em}
   {\footnotesize\flowlegend \hfill Library: \texttt{ccdproc} does the arithmetic \emph{and} propagates $\sigma$ at every step.}
+
+  \vspace{0.2em}
+  {\tiny Cosmic rays arrive at a rate set by the sky, not the field --- well under $0.1\%$
+  of pixels even in a long exposure. A mask claiming more than $1\%$ of the frame is
+  therefore not cosmic rays but the fine-structure model meeting a crowded field, so it is
+  discarded whole and \texttt{CRVETO} written to the header.}
 \end{frame}
 
 \begin{frame}{Phase 1 --- one mask, three witnesses}
@@ -344,11 +357,11 @@ cassa-verify work/phase3                   # independent sanity check
     % What each witness catches lives INSIDE its box, so the converging
     % arrows below have a clear lane and never strike through the text.
     \node[op, right=8mm of f, text width=4.0cm] (of)
-      {response $<0.5$ or $>1.5$ \\ {\tiny\itshape dead, low-QE, dust}};
+      {\emph{local} response $<0.5$ or $>1.5$ \\ {\tiny\itshape dead, low-QE, dust}};
     \node[op, right=8mm of d, text width=4.0cm] (od)
-      {rate $> 20\times$ median \\ {\tiny\itshape \textbf{hot} pixels}};
+      {rate $> 20\times$ median, or $>5\sigma$ \\ {\tiny\itshape \textbf{hot} pixels}};
     \node[op, right=8mm of b, text width=4.0cm] (ob)
-      {scatter $> 5\times$ median \\ {\tiny\itshape unstable / flickering}};
+      {scatter $> 5\times$ median, or $>5\sigma$ \\ {\tiny\itshape unstable / flickering}};
 
     \node[prod, right=14mm of od, text width=2.0cm, minimum height=1.5cm] (bpm)
       {\textbf{BPM}\\ \tiny bitwise OR};
@@ -363,7 +376,8 @@ cassa-verify work/phase3                   # independent sanity check
     \begin{column}{0.50\textwidth}
       {\footnotesize \textbf{Why all three?} A hot pixel adds $\sim$15\,e$^-$ to a flat sitting
       at tens of thousands of ADU. On our data every hot pixel has a normalised flat value of
-      $0.93$--$1.04$ --- dead centre. \emph{No flat threshold will ever find it.}}
+      $0.93$--$1.04$ --- dead centre. \emph{No flat threshold will ever find it.}
+      \par\smallskip \textbf{Local}, not global: vignetting is optics, not a defect.}
     \end{column}
     \begin{column}{0.47\textwidth}
       {\footnotesize \textbf{Why it matters:} the BPM is LA\,Cosmic's \texttt{inmask}. Miss a
@@ -379,10 +393,13 @@ cassa-verify work/phase3                   # independent sanity check
 \begin{frame}{Phase 1 --- seeding the error budget \asidetag}
   \begin{columns}[T]
     \begin{column}{0.52\textwidth}
-      Poisson (photon shot noise) plus read noise:
+      Poisson (photon shot noise) plus read noise, on the counts the detector
+      \emph{collected} --- raw minus the bias pedestal $B$:
       \[
-        \sigma_{\text{ADU}} = \frac{\sqrt{g \cdot \text{ADU} + \text{RN}^2}}{g}
+        \sigma_{\text{ADU}} = \frac{\sqrt{g \cdot (I - B) + \text{RN}^2}}{g}
       \]
+      {\footnotesize Treating the pedestal as signal would inject tens of
+      fictitious electrons into \emph{every} pixel.}
       Subtracting a master adds in quadrature:
       \[
         \sigma_{\text{out}} = \sqrt{\sigma_{\text{sci}}^2 + \sigma_{\text{bias}}^2}
@@ -397,7 +414,7 @@ cassa-verify work/phase3                   # independent sanity check
     \begin{column}{0.46\textwidth}
       \centering
       \begin{tikzpicture}[node distance=2mm]
-        \node[errbox, text width=3.4cm] (a) {seed: $\sqrt{gI+\mathrm{RN}^2}/g$};
+        \node[errbox, text width=3.4cm] (a) {seed: $\sqrt{g(I-B)+\mathrm{RN}^2}/g$};
         \node[errbox, below=3mm of a, text width=3.4cm] (b) {$\oplus\;\sigma_{\text{bias}}$};
         \node[errbox, below=3mm of b, text width=3.4cm] (c) {$\oplus\;\sigma_{\text{dark}}$};
         \node[errbox, below=3mm of c, text width=3.4cm] (d) {$\oplus\;\sigma_{\text{flat}}/F$ \tiny(relative)};
@@ -446,7 +463,7 @@ cassa-verify work/phase3                   # independent sanity check
     \node[ann] at (0,-3.16)    {median ratio at matched stars \\ \emph{clouds / airmass}};
     \node[ann] at (2.7,-3.16)  {bicubic, order 3 \\ \emph{keep the PSF peak}};
     \node[ann] at (5.4,-3.16)  {inverse-variance $+$ clip \\ \emph{depth $\propto\sqrt{N}$}};
-    \node[ann] at (8.1,-3.16)  {\texttt{solve-field}, local index \\ \emph{pixels $\rightarrow$ sky}};
+    \node[ann] at (8.1,-3.16)  {\texttt{solve-field} or in-process; index fetched once \\ \emph{pixels $\rightarrow$ sky}};
   \end{tikzpicture}
 
   \vspace{0.4em}
@@ -503,7 +520,7 @@ cassa-verify work/phase3                   # independent sanity check
 
     \node[ann] at (2.8,-0.46) {\texttt{DAOStarFinder} \\ \emph{find the stars}};
     \node[ann] at (5.6,-0.46) {aperture $+$ sky annulus, uses ERR \\ \emph{$F \pm \delta F$}};
-    \node[ann] at (8.4,-0.46) {Gaia $\to$ APASS $\to$ PS1 \\ \emph{a known truth}};
+    \node[ann] at (8.4,-0.46) {Gaia $\to$ APASS $\to$ Pan-STARRS $\to$ SDSS \\ \emph{a known truth}};
 
     % --- row 2 (y = -2.7), reached through a clear lane at y = -1.5
     \node[pstep] (s4) at (0,-2.7) {zero point};
@@ -520,8 +537,10 @@ cassa-verify work/phase3                   # independent sanity check
 
   \vspace{0.4em}
   {\footnotesize Output columns: \texttt{MAG\_BEST}, \texttt{MAG\_PSF},
-  \texttt{MAG\_AUTO}, \texttt{MAG\_APER}, \texttt{CLASS}, \texttt{SNR},
-  \texttt{FLAGS} --- the DQ bits OR-ed inside each source footprint.}
+  \texttt{MAG\_AUTO}, \texttt{MAG\_APER}, \texttt{MAG\_ISO}, \texttt{CLASS},
+  \texttt{SNR}, \texttt{FLAGS} --- the DQ bits OR-ed inside each source footprint.
+  With no zero point every one of those is \texttt{NaN} and \texttt{MAG\_INST} carries
+  the measurement instead: a failed cross-match costs you the scale, not the photometry.}
 \end{frame}
 
 \begin{frame}{Phase 3 --- the zero point, with an error bar \asidetag}
@@ -593,8 +612,10 @@ cassa-verify work/phase3                   # independent sanity check
       }
 
       \vspace{1em}
-      \begin{block}{\small Use \texttt{MAG\_BEST}}
-        \footnotesize PSF for point sources, Kron for extended.
+      \begin{block}{\small Which column, then?}
+        \footnotesize \texttt{MAG\_BEST} --- PSF for point sources, Kron for extended --- is
+        the \emph{total} magnitude. \texttt{MAG\_APER} is measured in the same aperture the
+        zero point was, so it is the one exactly consistent with the calibration.
         \texttt{MAG\_ISO} is kept only for comparison with older catalogs.
       \end{block}
     \end{column}
