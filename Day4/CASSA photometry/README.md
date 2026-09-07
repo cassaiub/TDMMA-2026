@@ -1,15 +1,14 @@
 # Day 4 — CASSA photometry pipeline
 
 From raw pixels off the telescope to a calibrated catalog, with an error budget
-carried the whole way. One lecture, then a hands-on reduction of a real night on
-the CASSA 8-inch.
+carried the whole way. One lecture, then a hands-on reduction of a full night's
+data in the CASSA 8-inch's own configuration.
 
 | File | What it is |
 |---|---|
 | `TDMMA-2026-CASSA-Photometry_slide.pdf` | The lecture (21 slides). |
 | `TDMMA-2026-CASSA-Photometry_participant-handbook.pdf` | **Read this first.** Installation, where the data goes, and the tasks notebook by notebook. |
 | `notebooks/` | The hands-on session, `00` to `04`. Run them in order. |
-| `tex/` | LaTeX sources for both PDFs. |
 | `raw/` | Empty — this is where your night goes. |
 
 ## Before the session
@@ -35,6 +34,21 @@ cassa-doctor        # must pass before the session starts
 
 `cassa-doctor` is the check that matters. Run it the day before, not in the
 first ten minutes of the session.
+
+Then register the environment as a Jupyter kernel, so the notebooks can find it:
+
+```bash
+python -m ipykernel install --user \
+    --name cassa-photometry --display-name "Python (CASSA photometry)"
+```
+
+When a notebook opens, check the kernel name in the top-right corner reads
+**`Python (CASSA photometry)`**; if not, *Kernel -> Change Kernel*. A notebook
+running on the wrong kernel reports `ModuleNotFoundError: No module named
+'cassa_photometry'`, which looks like a failed install but is not one.
+
+Note this is a **different** environment from the workshop-wide one used by the
+other sessions --- this pipeline needs a plate solver that pip cannot supply.
 
 ## The data
 
