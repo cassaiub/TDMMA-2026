@@ -56,7 +56,7 @@ scikit-learn>=1.1
 # and the source build does not work on native Windows. Windows participants
 # must use WSL -- which is also what Day 4's photometry pipeline requires, so
 # it is one setup, not two.
-healpy>=1.16
+# healpy>=1.16
 
 # --- Day 3: exoplanets ------------------------------------------------------
 # Downloads real TESS light curves from MAST (TOI-700, sector 1) and provides
