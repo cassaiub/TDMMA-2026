@@ -35,6 +35,21 @@ cassa-doctor        # must pass before the session starts
 `cassa-doctor` is the check that matters. Run it the day before, not in the
 first ten minutes of the session.
 
+Then register the environment as a Jupyter kernel, so the notebooks can find it:
+
+```bash
+python -m ipykernel install --user \
+    --name cassa-photometry --display-name "Python (CASSA photometry)"
+```
+
+When a notebook opens, check the kernel name in the top-right corner reads
+**`Python (CASSA photometry)`**; if not, *Kernel -> Change Kernel*. A notebook
+running on the wrong kernel reports `ModuleNotFoundError: No module named
+'cassa_photometry'`, which looks like a failed install but is not one.
+
+Note this is a **different** environment from the workshop-wide one used by the
+other sessions --- this pipeline needs a plate solver that pip cannot supply.
+
 ## The data
 
 Put your night in `raw/`, exactly as the acquisition software wrote it:

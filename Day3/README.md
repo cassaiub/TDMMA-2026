@@ -7,6 +7,9 @@ following one up from the ground.
 > repository root, see the [main README](../README.md). The ground-based
 > follow-up session installs separately; see its own folder.
 
+> When a notebook opens, check the kernel name in the top-right corner reads
+> **`Python (TDMMA 2026)`**. If it does not, *Kernel -> Change Kernel*.
+
 ---
 
 ```

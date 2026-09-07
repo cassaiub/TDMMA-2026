@@ -9,6 +9,11 @@ measurement from raw telescope frames — with an error bar you can defend.
 > pipeline installs separately; see
 > [`CASSA photometry/README.md`](CASSA%20photometry/README.md).
 
+> When `SNCosmo.ipynb` opens, check the kernel name in the top-right corner
+> reads **`Python (TDMMA 2026)`**. If it does not, *Kernel -> Change Kernel*.
+> The photometry notebooks use their own environment instead --- that folder's
+> README says which.
+
 ---
 
 ```

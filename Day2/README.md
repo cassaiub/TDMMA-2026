@@ -9,6 +9,9 @@ that into a pointing list.
 > [main README](../README.md). Windows participants need WSL for this day:
 > `healpy` publishes no Windows build.
 
+> When a notebook opens, check the kernel name in the top-right corner reads
+> **`Python (TDMMA 2026)`**. If it does not, *Kernel -> Change Kernel*.
+
 ---
 
 ```

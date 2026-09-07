@@ -14,9 +14,12 @@
 #                                       that pip cannot provide
 
 # --- Running the notebooks at all -------------------------------------------
-# Also supplies IPython and ipykernel; Day 1's alert-triage notebook imports
-# IPython.display.HTML directly.
+# jupyterlab also supplies IPython, which Day 1's alert-triage notebook imports
+# directly (IPython.display.HTML). ipykernel arrives with it too, but is listed
+# explicitly because the install step registers this environment as a named Jupyter
+# kernel with `python -m ipykernel install` -- see the README.
 jupyterlab>=4.0
+ipykernel>=6.0
 
 # --- Core numerics, used by nearly every notebook ---------------------------
 numpy>=1.21.0

@@ -24,18 +24,55 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Then confirm it worked:
+Then register this environment as a Jupyter kernel, so notebooks can find it:
 
 ```bash
-python -c "import numpy, pandas, matplotlib, scipy, sklearn, astropy, pyarrow, healpy, lightkurve; from alerce.core import Alerce; print('TDMMA environment OK')"
+python -m ipykernel install --user \
+    --name tdmma-2026 --display-name "Python (TDMMA 2026)"
 ```
 
-Start JupyterLab from the repository root and keep the virtual environment
-activated in that terminal:
+Finally, confirm it worked:
 
 ```bash
+python check_env.py
+```
+
+### Starting JupyterLab, and picking the right kernel
+
+```bash
+source .venv/bin/activate      # every time you open a new terminal
 jupyter lab
 ```
+
+**Check the kernel name in the top-right corner of every notebook.** It should
+say **`Python (TDMMA 2026)`**. If it says anything else — `Python 3
+(ipykernel)`, `base`, a conda environment — click it and use
+*Kernel → Change Kernel* to switch.
+
+This is the single most common way the day goes wrong, and it looks like a
+broken install rather than a wrong kernel:
+
+> ```
+> ModuleNotFoundError: No module named 'healpy'
+> ```
+>
+> …in a notebook, on a machine where `pip install` clearly succeeded.
+
+Installing the packages sets up your *environment*. It does not, by itself,
+make Jupyter *use* that environment — particularly if you already had Anaconda
+or another Jupyter on the machine, in which case `jupyter lab` may not even be
+the one you just installed. Registering the kernel above is what connects the
+two, and the name in the corner is how you confirm it.
+
+To check from inside a notebook rather than by eye, run this in the first cell:
+
+```python
+%run ../check_env.py        # one ../ per directory below the repository root
+```
+
+It prints which Python the *kernel* is using, lists every package with its
+version, and if something is missing tells you whether the problem is the
+environment or the kernel — those have different fixes.
 
 ### Windows: use WSL
 

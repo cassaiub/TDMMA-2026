@@ -7,6 +7,9 @@ alert out of a live broker and asking a telescope to observe it tonight.
 > [main README](../README.md). Nothing on this page needs a separate
 > environment.
 
+> When a notebook opens, check the kernel name in the top-right corner reads
+> **`Python (TDMMA 2026)`**. If it does not, *Kernel -> Change Kernel*.
+
 ---
 
 Four notebooks. The three at the top level are self-contained and can be run in
