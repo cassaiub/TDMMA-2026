@@ -33,3 +33,4 @@ venv/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.venv
