@@ -7,21 +7,25 @@ alert out of a live broker and asking a telescope to observe it tonight.
 
 ## 1. Installation
 
-One environment covers all of Day 1. Do this **before** the session, not during
-it — the install pulls a few hundred megabytes.
+Day 1 uses the workshop-wide environment — **one environment covers every day**
+except the two sessions that install separately (Day 3's ground-based follow-up
+and Day 4's photometry pipeline).
 
-You need **Python 3.9 or newer**. Check with `python3 --version`.
+Do this **before** the session, not during it. You need **Python 3.10 or newer**.
 
 ```bash
 git clone https://github.com/cassaiub/TDMMA-2026.git
-cd TDMMA-2026/Day1
+cd TDMMA-2026
 
 python3 -m venv .venv
-source .venv/bin/activate          # Windows PowerShell: .venv\Scripts\Activate.ps1
+source .venv/bin/activate
 
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+On **Windows**, do all of this inside WSL — Day 2 needs `healpy`, which has no
+Windows build. The root [`README.md`](../README.md) has the one-time WSL setup.
 
 Then check it worked:
 
@@ -29,8 +33,7 @@ Then check it worked:
 python -c "import numpy, pandas, matplotlib, scipy, sklearn, astropy, pyarrow; from alerce.core import Alerce; print('Day 1 environment OK')"
 ```
 
-If that prints `Day 1 environment OK`, you are ready. If it raises
-`ModuleNotFoundError`, the install did not finish — re-run
+If that raises `ModuleNotFoundError`, the install did not finish — re-run
 `pip install -r requirements.txt` and read the error rather than scrolling past
 it.
 
@@ -43,7 +46,7 @@ jupyter lab
 Leave the virtual environment activated in that terminal. Everything below runs
 inside JupyterLab.
 
-### What gets installed, and why
+### What Day 1 uses from that environment
 
 | Package | Needed for |
 |---|---|
@@ -64,7 +67,7 @@ Two steps reach the internet:
   registry the first time and caches it afterwards.
 
 If the connection is unreliable on the day, the alert session has an offline
-path — see the note under *Alert broker triage* below.
+path — see the note under `Alert_Brokers/` below.
 
 ---
 
@@ -75,7 +78,6 @@ any order; `Alert_Brokers/` is the main practical session and comes last.
 
 ```
 Day1/
-├── requirements.txt              this environment, for everything below
 ├── Compact_Object_Physics.ipynb
 ├── EM_TransintSky.ipynb
 ├── Modern_Survey_Astronomy.ipynb

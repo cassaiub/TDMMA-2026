@@ -1,0 +1,62 @@
+# TDMMA 2026 -- one environment for the whole workshop
+#
+#     python3 -m venv .venv
+#     source .venv/bin/activate          # Windows: see README, use WSL
+#     pip install --upgrade pip
+#     pip install -r requirements.txt
+#
+# Python 3.10 or newer (healpy 1.20 requires it).
+#
+# Two sessions are NOT covered here and install separately:
+#   * Day 3, Ground based follow up  -- see that folder
+#   * Day 4, CASSA photometry        -- clone cassaiub/observatory and run
+#                                       ./install.sh; it needs a plate solver
+#                                       that pip cannot provide
+
+# --- Running the notebooks at all -------------------------------------------
+# Also supplies IPython and ipykernel; Day 1's alert-triage notebook imports
+# IPython.display.HTML directly.
+jupyterlab>=4.0
+
+# --- Core numerics, used by nearly every notebook ---------------------------
+numpy>=1.21.0
+pandas>=1.4.0
+matplotlib>=3.5.0
+
+# scipy.integrate.solve_ivp  -> TOV integration        (Day 1, compact objects)
+# scipy.signal.fftconvolve   -> PSF matching           (Day 1, surveys)
+# scipy.integrate.quad       -> luminosity distance    (Day 4, SNCosmo)
+# scipy.optimize.minimize    -> chi-square cosmology fit
+scipy>=1.8.0
+
+# --- Astronomy --------------------------------------------------------------
+# Time, SkyCoord, EarthLocation, AltAz for the observability windows on Days 1
+# and 2; astropy.timeseries.BoxLeastSquares for the transit search on Day 3.
+# EarthLocation.of_site() downloads the observatory registry once, then caches
+# it, so that step wants network the first time it runs.
+astropy>=5.0
+
+# --- Day 1: alert brokers ---------------------------------------------------
+alerce>=2.3.0,<3     # ZTF alert and light-curve queries via the ALeRCE broker
+requests>=2.28.0     # HTTP layer beneath the broker client
+pyarrow>=8.0.0       # reads reference_alerts.parquet, the offline failsafe
+
+# --- Day 1: surveys ---------------------------------------------------------
+# RandomForestClassifier, train_test_split, accuracy_score, confusion_matrix --
+# the real/bogus classifier on difference-image cutouts.
+scikit-learn>=1.1
+
+# --- Day 2: gravitational-wave follow-up ------------------------------------
+# HEALPix sky maps: credible regions and telescope tiling.
+#
+# NO WINDOWS WHEEL EXISTS. healpy publishes wheels for Linux and macOS only,
+# and the source build does not work on native Windows. Windows participants
+# must use WSL -- which is also what Day 4's photometry pipeline requires, so
+# it is one setup, not two.
+healpy>=1.16
+
+# --- Day 3: exoplanets ------------------------------------------------------
+# Downloads real TESS light curves from MAST (TOI-700, sector 1) and provides
+# the flattening and periodogram machinery. First run needs network; the data
+# is then cached under ~/.lightkurve/.
+lightkurve>=2.4
