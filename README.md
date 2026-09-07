@@ -100,6 +100,8 @@ and then check whether the best tile is actually observable from your site at
 your observing time. The observatory and the event position are both meant to be
 changed — put your own in.
 
+Detail: [`Day2/README.md`](Day2/README.md).
+
 ### Day 3 — exoplanets, and ground-based follow-up
 
 `Day3/Exoplanet_TESS.ipynb` downloads a real TESS light curve for TOI-700, flattens
@@ -107,6 +109,8 @@ out the systematics, runs a Box-Least-Squares periodogram to recover the transit
 period, and phase-folds to measure the depth.
 
 `Day3/Ground based follow up/` is a separate session with its own handbook.
+
+Detail: [`Day3/README.md`](Day3/README.md).
 
 ### Day 4 — supernova cosmology, and a photometric pipeline
 
@@ -116,4 +120,6 @@ filename it needs nothing beyond NumPy and SciPy.
 
 `Day4/CASSA photometry/` is the full reduction pipeline — raw frames to a
 calibrated magnitude with an error budget carried the whole way. It installs
-separately; see [`Day4/CASSA photometry/README.md`](Day4/CASSA%20photometry/README.md).
+separately, and has its own handbook.
+
+Detail: [`Day4/README.md`](Day4/README.md).

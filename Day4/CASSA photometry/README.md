@@ -1,15 +1,14 @@
 # Day 4 — CASSA photometry pipeline
 
 From raw pixels off the telescope to a calibrated catalog, with an error budget
-carried the whole way. One lecture, then a hands-on reduction of a real night on
-the CASSA 8-inch.
+carried the whole way. One lecture, then a hands-on reduction of a full night's
+data in the CASSA 8-inch's own configuration.
 
 | File | What it is |
 |---|---|
 | `TDMMA-2026-CASSA-Photometry_slide.pdf` | The lecture (21 slides). |
 | `TDMMA-2026-CASSA-Photometry_participant-handbook.pdf` | **Read this first.** Installation, where the data goes, and the tasks notebook by notebook. |
 | `notebooks/` | The hands-on session, `00` to `04`. Run them in order. |
-| `tex/` | LaTeX sources for both PDFs. |
 | `raw/` | Empty — this is where your night goes. |
 
 ## Before the session

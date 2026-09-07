@@ -3,75 +3,11 @@
 From the physics of what explodes, to how a survey finds it, to pulling a real
 alert out of a live broker and asking a telescope to observe it tonight.
 
----
-
-## 1. Installation
-
-Day 1 uses the workshop-wide environment — **one environment covers every day**
-except the two sessions that install separately (Day 3's ground-based follow-up
-and Day 4's photometry pipeline).
-
-Do this **before** the session, not during it. You need **Python 3.10 or newer**.
-
-```bash
-git clone https://github.com/cassaiub/TDMMA-2026.git
-cd TDMMA-2026
-
-python3 -m venv .venv
-source .venv/bin/activate
-
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-On **Windows**, do all of this inside WSL — Day 2 needs `healpy`, which has no
-Windows build. The root [`README.md`](../README.md) has the one-time WSL setup.
-
-Then check it worked:
-
-```bash
-python -c "import numpy, pandas, matplotlib, scipy, sklearn, astropy, pyarrow; from alerce.core import Alerce; print('Day 1 environment OK')"
-```
-
-If that raises `ModuleNotFoundError`, the install did not finish — re-run
-`pip install -r requirements.txt` and read the error rather than scrolling past
-it.
-
-### Start JupyterLab
-
-```bash
-jupyter lab
-```
-
-Leave the virtual environment activated in that terminal. Everything below runs
-inside JupyterLab.
-
-### What Day 1 uses from that environment
-
-| Package | Needed for |
-|---|---|
-| `jupyterlab` | running the notebooks at all; also supplies IPython |
-| `numpy`, `pandas`, `matplotlib` | every notebook |
-| `scipy` | TOV integration, and PSF matching for difference imaging |
-| `astropy` | coordinates, times and the observability window |
-| `alerce`, `requests` | querying the ALeRCE alert broker |
-| `pyarrow` | reading the offline alert dataset (Parquet) |
-| `scikit-learn` | the real/bogus classifier in the survey notebook |
-
-### Network
-
-Two steps reach the internet:
-
-- **ALeRCE broker queries** in the alert-triage notebook.
-- **`EarthLocation.of_site('ctio')`**, which downloads Astropy's observatory
-  registry the first time and caches it afterwards.
-
-If the connection is unreliable on the day, the alert session has an offline
-path — see the note under `Alert_Brokers/` below.
+> **Setup is workshop-wide.** Install once from the repository root — see the
+> [main README](../README.md). Nothing on this page needs a separate
+> environment.
 
 ---
-
-## 2. The day's hands-on
 
 Four notebooks. The three at the top level are self-contained and can be run in
 any order; `Alert_Brokers/` is the main practical session and comes last.
@@ -134,6 +70,10 @@ Observatory 2-metre at Cerro Tololo, and you have to decide what to point it at.
    LCO Observation Portal, which validates your coordinates, exposure time,
    airmass constraint and instrument configuration, and tells you exactly which
    one you got wrong.
+
+The observability step calls `EarthLocation.of_site('ctio')`, which downloads
+Astropy's observatory registry the first time and caches it afterwards — so that
+one cell wants network on a first run.
 
 **Run it from its own directory**, so that the notebook can find
 `modules/observability.py` and `data/`:
