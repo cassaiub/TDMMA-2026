@@ -14,10 +14,12 @@ that into a pointing list.
 
 ---
 
-```
-Day2/
-└── GW_followup.ipynb
-```
+
+## `Gw_sky_localization_triangulation_tutorial`
+
+Colab Link: [Click Here](https://colab.research.google.com/drive/1xSl3en0DjIqPucUgBGNfmdMqd2Q3g4Sw?usp=sharing)
+
+
 
 ## `GW_followup.ipynb` — from a sky map to a pointing list
 
