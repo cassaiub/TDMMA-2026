@@ -78,4 +78,9 @@ setup instructions. Nothing in the workshop-wide environment is required for it.
 
 Start with the handbook PDF in that folder.
 
-Goto this link : [Click Here](https://wto-incredible-cafe-age.trycloudflare.com)
+Then you can open a Tarminal in your pc and type 
+```bash
+ssh -L localhost:9999:localhost:9999 tdmma@10.50.255.33 
+```
+
+then go to ```localhost:9999``` from your browser. 
