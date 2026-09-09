@@ -21,6 +21,8 @@ The pipeline itself is a separate package, so there are two things to fetch:
 # 1. Miniforge, if you do not already have conda.
 #    On Windows, do all of this inside WSL: `wsl --install` from an admin
 #    PowerShell, reboot, then open Ubuntu and type these commands there.
+#    (The pipeline does have a native Windows installer now, but it is
+#    unverified -- and Day 2 needs WSL anyway, so use WSL.)
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
 

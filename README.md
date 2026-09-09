@@ -76,10 +76,13 @@ environment or the kernel — those have different fixes.
 
 ### Windows: use WSL
 
-There is no native-Windows path. `healpy`, which Day 2 needs for HEALPix sky
-maps, publishes wheels for Linux and macOS only and does not build from source
-on Windows. Day 4's photometry pipeline is Linux/macOS too — its installer is a
-shell script and native Windows is not part of what it tests.
+`healpy`, which Day 2 needs for HEALPix sky maps, publishes wheels for Linux and
+macOS only and does not build from source on Windows. That alone settles it for
+the workshop-wide environment: there is no native-Windows path.
+
+(Day 4's pipeline is a separate case — it now *does* have a native Windows
+installer, since its plate solver publishes a Windows build. But it is
+unverified, and you need WSL for Day 2 regardless, so use WSL for everything.)
 
 So install WSL once and treat it as your Linux machine for the whole workshop:
 
