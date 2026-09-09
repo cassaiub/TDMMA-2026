@@ -14,10 +14,13 @@ following one up from the ground.
 
 ```
 Day3/
-├── Exoplanet_TESS.ipynb
+
 └── Ground based follow up/
     └── TDMMA-2026-Ground-Based-Followup_participant-handbook.pdf
 ```
+## `Gw_sky_localization_triangulation_tutorial`
+
+Colab Link: [Click Here](https://colab.research.google.com/drive/1xSl3en0DjIqPucUgBGNfmdMqd2Q3g4Sw?usp=sharing)
 
 ## `Exoplanet_TESS.ipynb` — recovering a transit from real TESS data
 

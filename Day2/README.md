@@ -15,9 +15,6 @@ that into a pointing list.
 ---
 
 
-## `Gw_sky_localization_triangulation_tutorial`
-
-Colab Link: [Click Here](https://colab.research.google.com/drive/1xSl3en0DjIqPucUgBGNfmdMqd2Q3g4Sw?usp=sharing)
 
 
 
