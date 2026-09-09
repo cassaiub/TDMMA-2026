@@ -60,10 +60,11 @@ instrument signature removal, stacking and plate solving, source detection and a
 zero point, carrying an error and a data-quality plane the whole way. You finish
 by reporting the magnitude of one assigned star with an honest uncertainty.
 
-**This session installs separately.** It needs an Astrometry.net plate solver,
-which pip cannot supply, so it has its own installer rather than living in the
-workshop-wide environment. Windows participants use WSL — the same WSL setup Day 2
-already requires.
+**This session installs separately.** Plate solving needs a compiled binary
+that pip alone cannot supply, so the pipeline has its own installer rather than
+living in the workshop-wide environment. One command handles it — the installer
+tries three solver backends and uses the first your platform can run. Windows
+participants use WSL, the same WSL setup Day 2 already requires.
 
 Read [`CASSA photometry/README.md`](CASSA%20photometry/README.md) first, then the
 participant handbook PDF in that folder, which walks through installation on all

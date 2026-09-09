@@ -78,8 +78,8 @@ environment or the kernel — those have different fixes.
 
 There is no native-Windows path. `healpy`, which Day 2 needs for HEALPix sky
 maps, publishes wheels for Linux and macOS only and does not build from source
-on Windows. Day 4's photometry pipeline has the same constraint for a different
-reason — its plate solver is not packaged for Windows either.
+on Windows. Day 4's photometry pipeline is Linux/macOS too — its installer is a
+shell script and native Windows is not part of what it tests.
 
 So install WSL once and treat it as your Linux machine for the whole workshop:
 
@@ -112,7 +112,7 @@ These do **not** use the environment above:
 | Session | How it installs |
 |---|---|
 | `Day3/Ground based follow up/` | See the handbook in that folder. |
-| `Day4/CASSA photometry/` | Clone [`cassaiub/observatory`](https://github.com/cassaiub/observatory), run `./install.sh`, then `conda activate cassa-photometry`. It needs an Astrometry.net plate solver, which pip cannot supply. Full instructions are in that session's participant handbook. |
+| `Day4/CASSA photometry/` | Clone [`cassaiub/observatory`](https://github.com/cassaiub/observatory), run `./install.sh`, then `conda activate cassa-photometry`. It needs a plate-solver binary, which pip alone cannot supply — the installer handles it. Full instructions are in that session's participant handbook. |
 
 ---
 

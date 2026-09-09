@@ -19,8 +19,8 @@ The pipeline itself is a separate package, so there are two things to fetch:
 
 ```bash
 # 1. Miniforge, if you do not already have conda.
-#    On Windows, do all of this inside WSL -- there is no plate solver for
-#    native Windows, and without one there is no zero point.
+#    On Windows, do all of this inside WSL: `wsl --install` from an admin
+#    PowerShell, reboot, then open Ubuntu and type these commands there.
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
 
@@ -48,7 +48,27 @@ running on the wrong kernel reports `ModuleNotFoundError: No module named
 'cassa_photometry'`, which looks like a failed install but is not one.
 
 Note this is a **different** environment from the workshop-wide one used by the
-other sessions --- this pipeline needs a plate solver that pip cannot supply.
+other sessions --- this pipeline needs a plate-solver binary that pip alone
+cannot supply.
+
+### Which plate solver you get, and why it does not matter
+
+`install.sh` tries three backends and uses the first that installs: **ASTAP** (a
+sub-megabyte binary that runs on every platform, ARM included), then
+Astrometry.net's `solve-field`, then an in-process Python solver.
+`cassa-doctor` tells you which one you have.
+
+**Your results do not depend on the answer.** The one thing ASTAP does not
+report --- the astrometric residual `ASTRMS`, which Phase 3 uses to size its
+catalog cross-match --- the pipeline measures for itself, so every backend
+produces it. If your neighbour has a different solver, your catalogs are still
+comparable.
+
+There is also **nothing to download in advance**. Plate solving matches your
+stars against a sky catalog, and those catalogs are large (859 MB for ASTAP,
+~34 GB for Astrometry.net). You need neither: the pipeline reads your frame's
+pointing and field size and fetches only the pieces that field needs --- about
+6 MB for ASTAP --- caching them under `~/.cache/cassa-photometry/`.
 
 ## The data
 
@@ -94,5 +114,9 @@ The handbook's last page has the format.
 ## If something breaks
 
 The handbook's final section covers the failures that actually happen — no
-plate solver, no zero point, a health check that says STOP. Work through that
-before asking; it names the cause for each.
+plate solver, no zero point, a health check that says STOP, macOS quarantining
+the ASTAP binary. Work through that before asking; it names the cause for each.
+
+`cassa-doctor` prints the state of the whole install in one screen. Bring that
+output rather than a description. Two solver backends showing as unavailable is
+**normal** — you only need one; the line that matters is `solver: in use`.
