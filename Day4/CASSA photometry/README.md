@@ -19,10 +19,9 @@ The pipeline itself is a separate package, so there are two things to fetch:
 
 ```bash
 # 1. Miniforge, if you do not already have conda.
-#    On Windows, do all of this inside WSL: `wsl --install` from an admin
-#    PowerShell, reboot, then open Ubuntu and type these commands there.
-#    (The pipeline does have a native Windows installer now, but it is
-#    unverified -- and Day 2 needs WSL anyway, so use WSL.)
+#    On Windows this pipeline installs natively -- run `.\install.ps1` instead
+#    of `./install.sh` and skip step 1 if you already have conda. Day 2 needs
+#    WSL for other reasons though, so WSL is fine here too.
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
 
@@ -37,7 +36,8 @@ cassa-doctor        # must pass before the session starts
 `cassa-doctor` is the check that matters. Run it the day before, not in the
 first ten minutes of the session.
 
-Then register the environment as a Jupyter kernel, so the notebooks can find it:
+The installer registers the Jupyter kernel for you. If you need to do it by
+hand:
 
 ```bash
 python -m ipykernel install --user \

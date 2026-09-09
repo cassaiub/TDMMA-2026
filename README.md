@@ -80,9 +80,9 @@ environment or the kernel — those have different fixes.
 macOS only and does not build from source on Windows. That alone settles it for
 the workshop-wide environment: there is no native-Windows path.
 
-(Day 4's pipeline is a separate case — it now *does* have a native Windows
-installer, since its plate solver publishes a Windows build. But it is
-unverified, and you need WSL for Day 2 regardless, so use WSL for everything.)
+(Day 4's pipeline is a separate case — it installs and runs natively on Windows.
+But you need WSL for Day 2 regardless, so WSL is the simpler answer for the
+workshop as a whole.)
 
 So install WSL once and treat it as your Linux machine for the whole workshop:
 
