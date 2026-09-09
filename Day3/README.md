@@ -22,38 +22,54 @@ Day3/
 
 Colab Link: [Click Here](https://colab.research.google.com/drive/1xSl3en0DjIqPucUgBGNfmdMqd2Q3g4Sw?usp=sharing)
 
-## `Exoplanet_TESS.ipynb` — recovering a transit from real TESS data
 
-Not simulated data: this notebook pulls a genuine light curve out of the archive
-and finds a real planet in it.
+## `GW_followup.ipynb` — from a sky map to a pointing list
 
-1. **Download.** `lightkurve` queries MAST for **TOI-700** (TIC 150428135),
-   sector 1, and downloads the light curve. The target is a multi-planet system
-   around an M dwarf, one of whose planets is Earth-sized and in the habitable
-   zone.
-2. **Detrend.** Flatten out the instrumental systematics and stellar variability
-   that would otherwise swamp a transit. A transit is a fraction of a percent
-   deep; almost everything else in the raw light curve is larger than the signal.
-3. **Search.** A Box-Least-Squares periodogram over 10,000 trial periods from 0.5
-   to 15 days, with transit durations from 0.05 to 0.25 days. BLS fits a box —
-   flat, then a dip, then flat — because that is what a transit is, and it beats
-   a Fourier method that is looking for sinusoids.
-4. **Fold and measure.** Phase-fold on the recovered period, bin the result, and
-   read the transit depth. Depth gives you the planet-to-star radius ratio:
-   δ ≈ (R<sub>p</sub>/R<sub>*</sub>)².
+Five steps, run top to bottom.
 
-**Network is needed on the first run** — the light curve comes from MAST. It is
-then cached under `~/.lightkurve/`, so a second run works offline. If the venue
-connection is slow, run the download cell once before the session.
+1. **Build the sky map.** A mock HEALPix probability density at `nside = 64`, a
+   Gaussian on the sphere centred on the event position. HEALPix divides the sky
+   into equal-area pixels, which is what makes the probability arithmetic that
+   follows honest.
+2. **Credible regions.** Sort pixels by probability, take the cumulative sum, and
+   cut at 50% and 90%. Multiply the pixel count by the area per pixel and you
+   have the localisation area in square degrees — the number that decides whether
+   follow-up is feasible at all.
+3. **Tiling.** Lay a grid of telescope fields (2° × 2° by default) over the
+   region and integrate the probability inside each one.
+4. **Ranking.** Sort the tiles by contained probability. The top three are where
+   you point first, and the printout tells you what fraction of the total
+   probability each one buys.
+5. **Observability.** Convert the best tile to altitude and azimuth for your site
+   at your observing time, and accept it only above 30° altitude. A tile holding
+   most of the probability is worthless if it is below your horizon.
 
-### Things worth trying
+## Make it yours
 
-- Change `sector=1` to another sector and see whether the same period comes back.
-  It should. If it does not, you have found a systematic rather than a planet.
-- Widen the period grid. The BLS will happily report a "best" period for pure
-  noise, so the question is always whether the peak stands above the rest of the
-  periodogram, not whether a peak exists.
-- Try a target with no known planet and confirm you find nothing convincing.
+Three things in the notebook are placeholders, and the exercise is to replace
+them:
+
+| Change | Where | Default |
+|---|---|---|
+| Event position | `center_ra`, `center_dec` in step 1 | RA 180°, Dec −30° |
+| Observatory | `EarthLocation(...)` in step 5 | Palomar (33.356°N, 116.863°W, 1706 m) |
+| Observing time | `obs_time` in step 5 | 2026-09-08 04:00 UTC |
+
+Set the site to **Dhaka** and the time to **now**, then re-run from step 4. The
+same event that was comfortably observable from California may be unobservable
+from Bangladesh at that hour — which is the whole argument for a globally
+distributed follow-up network.
+
+If you move the event position, remember to move the tile grid with it:
+`tile_ras` and `tile_decs` in step 3 are hard-coded to bracket the default
+position.
+
+## Notes
+
+- Everything here runs offline once installed. Astropy may fetch its Earth
+  orientation data on the first coordinate transform, which is cached afterwards.
+- `healpy` needs Linux or macOS. On Windows, run the whole workshop inside WSL.
+
 
 ## `Ground based follow up/`
 
