@@ -16,22 +16,44 @@ data in the CASSA 8-inch's own configuration.
 The handbook has the full instructions; this is the shape of them.
 
 The pipeline itself is a separate package, so there are two things to fetch:
+conda (if you have none), then the pipeline. It installs natively on **Linux,
+macOS and Windows**.
+
+**1. Miniforge**, if you do not already have conda or miniconda.
 
 ```bash
-# 1. Miniforge, if you do not already have conda.
-#    On Windows this pipeline installs natively -- run `.\install.ps1` instead
-#    of `./install.sh` and skip step 1 if you already have conda. Day 2 needs
-#    WSL for other reasons though, so WSL is fine here too.
+# Linux / macOS -- the installer name is built from your own machine, so this
+# is the same pair of commands on Intel and ARM alike.
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
+```
 
-# 2. The pipeline.
+On **Windows**, download the Miniforge installer from
+[conda-forge.org/download](https://conda-forge.org/download/) and run it, or
+skip this step if you already have Miniconda or Anaconda.
+
+**2. The pipeline.**
+
+```bash
+# Linux / macOS
 git clone https://github.com/cassaiub/observatory.git
 cd observatory/photometric_pipeline
 ./install.sh
 conda activate cassa-photometry
 cassa-doctor        # must pass before the session starts
 ```
+
+```powershell
+# Windows
+git clone https://github.com/cassaiub/observatory.git
+cd observatory\photometric_pipeline
+.\install.ps1
+cassa-doctor        # must pass before the session starts
+```
+
+`install.ps1` does the same things as `install.sh`. WSL works too if you already
+have it for Day 2 — it is real x86-64 Linux, so use the Linux commands inside
+it, and `.\install.ps1 -Wsl` prints the setup steps.
 
 `cassa-doctor` is the check that matters. Run it the day before, not in the
 first ten minutes of the session.

@@ -77,14 +77,8 @@ environment or the kernel — those have different fixes.
 ### Windows: use WSL
 
 `healpy`, which Day 2 needs for HEALPix sky maps, publishes wheels for Linux and
-macOS only and does not build from source on Windows. That alone settles it for
-the workshop-wide environment: there is no native-Windows path.
-
-(Day 4's pipeline is a separate case — it installs and runs natively on Windows.
-But you need WSL for Day 2 regardless, so WSL is the simpler answer for the
-workshop as a whole.)
-
-So install WSL once and treat it as your Linux machine for the whole workshop:
+macOS only and does not build from source on Windows. There is no way around
+that, so **the workshop-wide environment needs WSL**:
 
 ```powershell
 wsl --install
@@ -94,6 +88,11 @@ Reboot when prompted, open **Ubuntu** from the Start menu, finish creating your
 user, and then follow the Linux instructions above inside that shell. Your
 Windows drives are visible under `/mnt/c`, but keep the repository inside the
 Linux filesystem — it is considerably faster.
+
+> **Day 4's pipeline is the exception**: it installs and runs natively on
+> Windows (`.\install.ps1`), because its plate solver publishes a Windows
+> build. You will have WSL for Day 2 regardless, so either works — but if you
+> only ever want to run the photometry pipeline, you do not need WSL at all.
 
 ### Network
 
@@ -115,7 +114,7 @@ These do **not** use the environment above:
 | Session | How it installs |
 |---|---|
 | `Day3/Ground based follow up/` | See the handbook in that folder. |
-| `Day4/CASSA photometry/` | Clone [`cassaiub/observatory`](https://github.com/cassaiub/observatory), run `./install.sh`, then `conda activate cassa-photometry`. It needs a plate-solver binary, which pip alone cannot supply — the installer handles it. Full instructions are in that session's participant handbook. |
+| `Day4/CASSA photometry/` | Clone [`cassaiub/observatory`](https://github.com/cassaiub/observatory), then run `./install.sh` (Linux/macOS/WSL) or `.\install.ps1` (Windows) and `conda activate cassa-photometry`. It needs a plate-solver binary, which pip alone cannot supply — the installer handles it, and registers the Jupyter kernel. Full instructions are in that session's participant handbook. |
 
 ---
 

@@ -62,9 +62,11 @@ by reporting the magnitude of one assigned star with an honest uncertainty.
 
 **This session installs separately.** Plate solving needs a compiled binary
 that pip alone cannot supply, so the pipeline has its own installer rather than
-living in the workshop-wide environment. One command handles it — the installer
-tries three solver backends and uses the first your platform can run. Windows
-participants use WSL, the same WSL setup Day 2 already requires.
+living in the workshop-wide environment. One command handles it — `./install.sh`
+on Linux and macOS, `.\install.ps1` on Windows — and it tries three solver
+backends, using the first your platform can run. It also registers the Jupyter
+kernel. Windows participants can install natively or use the WSL they already
+have for Day 2; both work.
 
 Read [`CASSA photometry/README.md`](CASSA%20photometry/README.md) first, then the
 participant handbook PDF in that folder, which walks through installation on all
