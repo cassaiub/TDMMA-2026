@@ -11,7 +11,13 @@ that takes raw telescope frames to a calibrated catalogue.
 **One environment covers the whole workshop**, with two exceptions noted below.
 Do this **before** the first session — the install pulls a few hundred megabytes.
 
-You need **Python 3.10 or newer**. Check with `python3 --version`.
+You need **Python 3.10–3.13**. Check with `python3 --version`.
+
+> Not 3.14 yet, if you can avoid it. Several scientific packages have not
+> published wheels for it, so pip falls back to compiling them from source —
+> which needs a C compiler and the Python development headers, and fails with a
+> confusing `Python.h: No such file or directory` when they are missing. On
+> 3.10–3.13 everything installs as a prebuilt wheel.
 
 ```bash
 git clone https://github.com/cassaiub/TDMMA-2026.git

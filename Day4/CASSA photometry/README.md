@@ -55,6 +55,12 @@ cassa-doctor        # must pass before the session starts
 have it for Day 2 — it is real x86-64 Linux, so use the Linux commands inside
 it, and `.\install.ps1 -Wsl` prints the setup steps.
 
+**Use Python 3.10–3.13.** On 3.14 some dependencies have no wheel yet and pip
+tries to compile them, which needs build tools most laptops do not have. The
+installer checks for them first and tells you what to do, but the easier answer
+is a Python that has wheels — or `./install.sh --conda`, which ships prebuilt
+binaries and never compiles anything.
+
 `cassa-doctor` is the check that matters. Run it the day before, not in the
 first ten minutes of the session.
 
