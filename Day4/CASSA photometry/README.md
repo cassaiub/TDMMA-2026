@@ -9,7 +9,7 @@ data in the CASSA 8-inch's own configuration.
 | `TDMMA-2026-CASSA-Photometry_slide.pdf` | The lecture (21 slides). |
 | `TDMMA-2026-CASSA-Photometry_participant-handbook.pdf` | **Read this first.** Installation, where the data goes, and the tasks notebook by notebook. |
 | `notebooks/` | The hands-on session, `00` to `04`. Run them in order. |
-| `raw/` | Empty — this is where your night goes. |
+| `raw/` | Empty — for your **own** night. The session's dataset (NGC 7331, 77 frames) comes with the observatory clone. |
 
 ## Before the session
 
@@ -96,21 +96,43 @@ pointing and field size and fetches only the pieces that field needs --- about
 
 ## The data
 
-Put your night in `raw/`, exactly as the acquisition software wrote it:
+**A night comes with the pipeline.** When you clone `cassaiub/observatory` for
+the install, you also get `photometric_pipeline/workshop/raw/` — one real night,
+77 frames, 155 MB:
 
 ```
-raw/20260903/BIAS/untargeted/    ...fits
-raw/20260903/DARK/untargeted/    ...fits
-raw/20260903/FLAT/untargeted/    ...fits
-raw/20260903/LIGHT/m22/          ...fits
+raw/20230822/
+├── Bias/               10 frames,  0 s
+├── Dark/               10 frames, 60 s
+├── Flat/               43 frames,  3 s   (B 18, R 15, V 10)
+└── Light/NGC7331/      14 frames, 60 s   (B 5, R 5, V 4)
 ```
 
-Do not rename or reorganise anything. The pipeline reads the tree recursively
-and sorts frames by their `IMAGETYP`, `FILTER` and `EXPTIME` **headers**, never
-by folder name — so a flat directory works too, and so does any other layout.
+NGC 7331, observed 2023-08-23 on an iTelescope **CDK700** with an **Andor
+DU934P** CCD, 1024×1024. Real data, and the exercises are keyed to it — the
+expected answers in the notebooks come from a reference reduction of exactly
+these frames.
 
-`raw/` and `work/` are both git-ignored: a night is a few hundred MB, and the
-reduction it produces is larger again. Nothing you generate here gets committed.
+Two things about this night you will meet, and should:
+
+- **The header's plate scale is wrong** — `SECPIX` says 0.4″/px against a truth
+  of 0.5905″/px, a 32% error. The pipeline solves anyway and tells you.
+- **There is no gain or read noise in the header**, so phase 1 assumes
+  1.0 e⁻/ADU and 10 e⁻ and says so for every frame. Every uncertainty
+  downstream is an estimate rather than a measurement. That warning is the
+  pipeline being honest.
+
+### Bringing your own night instead
+
+Put it in this folder's `raw/`, exactly as the acquisition software wrote it,
+and point the notebooks at it with `RAW_DIR`. Do not rename or reorganise
+anything: the pipeline reads the tree recursively and sorts frames by their
+`IMAGETYP`, `FILTER` and `EXPTIME` **headers**, never by folder name — so a flat
+directory works too, and so does any other layout.
+
+This folder's `raw/` and `work/` are both git-ignored: a night is a few hundred
+MB and the reduction it produces is larger again, so nothing you generate here
+gets committed. The shipped night lives in the observatory repository instead.
 
 ## The notebooks
 

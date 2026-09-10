@@ -23,7 +23,8 @@ Day4/
     ├── TDMMA-2026-CASSA-Photometry_slide.pdf
     ├── TDMMA-2026-CASSA-Photometry_participant-handbook.pdf
     ├── notebooks/     00 to 04, run in order
-    └── raw/           empty — your night goes here
+    └── raw/           empty — for your own night; the session's
+                        dataset ships with the observatory clone
 ```
 
 ## `SNCosmo.ipynb` — measuring Ω<sub>m</sub> from a Hubble diagram
